@@ -59,7 +59,8 @@ function Menu() {
                         <p className="text-white">Gs {menu.costoMenu}</p>
                         <img
                             className="w-52"
-                            src={`data:image/jpeg;base64,${menu.imagenMenu}`}
+                            /* src={`data:image/jpeg;base64,${menu.imagenMenu}`} */
+                            src={menu.imagenMenu}
                         ></img>
                         <div className="flex gap-1 mt-5 justify-center h-10">
                             {/* <button

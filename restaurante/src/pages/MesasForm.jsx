@@ -5,12 +5,22 @@ import { Formik, Form } from "formik";
 import { crearMesasRequest } from "../api/mesas.api";
 
 function MesasForm() {
-
-    const navigate = useNavigate();
-    const params= useParams();
+  const navigate = useNavigate();
+  const params = useParams();
 
   const [mesa, setMesa] = useState({
     sillas: "",
+  });
+
+  const editMesas = async () => {
+    const response = await getMesasRequestUna(params.id);
+    setMesa({ sillas: response.data.sillasMesas });
+  };
+
+  useEffect(() => {
+    if (params.id) {
+      editMesas();
+    }
   });
 
   return (

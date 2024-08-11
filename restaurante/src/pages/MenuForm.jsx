@@ -1,18 +1,75 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useParams, useNavigate, Navigate } from "react-router-dom";
 import { Formik, Form } from "formik";
-import { crearMesuRequest } from "../api/menu.api";
+import {
+  crearMesuRequest,
+  getMenuRequestUno,
+  updateMenuRequest,
+} from "../api/menu.api";
 
 function MenuForm() {
+  const navigate = useNavigate();
+  const params = useParams();
   const [item, setItem] = useState({
     titulo: "",
     descripcion: "",
     costo: "",
     imagen: "",
   });
-  const params = useParams();
+  const [imagen, setImagen] = useState(null);
+  const [imgEdit, setImgEdit] = useState(null);
 
+  const imageRef = useRef(null);
+
+  const toBase64 = async (file) => {
+    const reader = new FileReader();
+    const result = await new Promise((resolve, reject) => {
+      reader.onload = (event) => {
+        resolve(event.target.result);
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+      reader.readAsDataURL(file);
+    });
+    return result;
+  };
+
+  const handleFotoChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImagen(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        imageRef.current.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const editMenu = async () => {
+    try {
+      const response = await getMenuRequestUno(params.id);
+      console.log(response.data.costoMenu);
+      setItem({
+        titulo: response.data.tituloMenu,
+        descripcion: response.data.descripcionMenu,
+        costo: response.data.costoMenu,
+        imagen: response.data.imagenMenu,
+      });
+      setImgEdit(response.data.imagenMenu);
+      setImagen(response.data.imagenMenu);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (params.id) {
+      editMenu();
+    }
+  }, []);
   return (
     <>
       <div className="flex justify-center">
@@ -26,14 +83,28 @@ function MenuForm() {
               enableReinitialize={true}
               onSubmit={async (values) => {
                 if (params.id) {
-                  console.log("UPDATE");
+                  let img;
+                  if (imgEdit != imagen) {
+                    img = await toBase64(imagen);
+                  } else {
+                    img = imagen;
+                  }
+                  await updateMenuRequest(params.id, {
+                    titulo: values.titulo,
+                    descripcion: values.descripcion,
+                    costo: values.costo,
+                    imagen: img,
+                  });
+                  navigate("/menu/");
                 } else {
-
-                  var reader = new FileReader();
-                  var blob =new Blob(values.imagen)
-                  reader.readAsDataURL(values.imagen)
-                  console.log(blob);
-                  /* await crearMesuRequest(values); */
+                  const img = await toBase64(imagen);
+                  await crearMesuRequest({
+                    titulo: values.titulo,
+                    descripcion: values.descripcion,
+                    costo: values.costo,
+                    imagen: img,
+                  });
+                  navigate("/Menu/");
                 }
               }}
             >
@@ -79,13 +150,21 @@ function MenuForm() {
                     <label className="block uppercase text-center font-bold">
                       Foto
                     </label>
+                    {imagen && (
+                      <img
+                        ref={imageRef}
+                        src={imagen}
+                        alt="Imagen seleccionada"
+                        className="object-scale-down h-16 w-16"
+                      />
+                    )}
                     <input
                       type="file"
                       name="imagen"
                       placeholder="fotico"
                       className="px-2 py-1 rounded-sm w-full"
-                      onChange={handleChange}
-                      value={values.imagen || ""}
+                      onChange={handleFotoChange}
+                      ref={imageRef}
                       required
                     />
                   </div>
@@ -101,7 +180,7 @@ function MenuForm() {
             </Formik>
           </div>
           <Link
-            to="/"
+            to="/menu"
             className="bg-indigo-500 px-2 block text-center py-2 rounded-xl mb-2 text-white w-full mt-9"
           >
             Volver

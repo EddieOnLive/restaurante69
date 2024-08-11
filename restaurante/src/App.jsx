@@ -24,6 +24,7 @@ function App() {
               {/* Menu */}
               <Route path="menu" element={<Menu />} />
               <Route path="/menuForm" element={<MenuForm />} />
+              <Route path="/menuForm/:id" element={<MenuForm />} />
 
               {/* Mesas */}
               <Route path="/mesasManager" element={<MesasManager />} />

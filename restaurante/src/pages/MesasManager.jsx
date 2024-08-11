@@ -93,12 +93,6 @@ function MesasManager() {
                     Liberar
                   </button>
                   <button
-                    className="bg-slate-800 px-2 py-1 text-white rounded-md"
-                    onClick={() => navigate(`/MesasForm/${mesa.idMesa}`)}
-                  >
-                    Editar
-                  </button>
-                  <button
                     className="bg-red-500 px-2 py-1 mr-1 ml-1 text-white rounded-md"
                     onClick={() => {
                         borrarMesa(mesa.idMesa);

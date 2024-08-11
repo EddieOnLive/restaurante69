@@ -11,22 +11,19 @@ export const obtenerMenu = async (req, res) => {
 };
 
 export const updateMenuRequest = async (req, res) => {
-  console.log("Hola");
-  /* try {
-    const { reservado } = 0;
+  try {
+    const { titulo, descripcion, costo, imagen } = req.body;
     const result = await pool.query(
-      "UPDATE menu SET reservadoMesas=?  WHERE idMesa = ?",
-      [reservado, req.params.id]
+      "UPDATE menu SET tituloMenu=?, descripcionMenu=?, costoMenu=?, imagenMenu=? WHERE idMenu=?",
+      [titulo, descripcion, costo, imagen, req.params.id]
     );
     res.json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
-  } */
+  }
 };
 
 export const crearMenu = async (req, res) => {
-  
-  
   try {
     const { titulo, descripcion, costo, imagen } = req.body;
     const [result] = await pool.query(
@@ -39,23 +36,21 @@ export const crearMenu = async (req, res) => {
   }
 };
 
-/* 
-export const obtenerUnClub = async (req, res) => {
+export const obtenerMenuUno = async (req, res) => {
   try {
-    const [result] = await pool.query("SELECT * FROM clubs WHERE id = ?", [
+    const [result] = await pool.query("SELECT * FROM menu WHERE idMenu = ?", [
       req.params.id,
     ]);
     if (result.length === 0) {
-      return res.status(404).json({ message: "Club no encontrado" });
+      return res.status(404).json({ message: "Menu no encontrado" });
     }
     res.json(result[0]);
   } catch (error) {
-    return res.error(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
-
-
+/* 
 export const actualizarClub = async (req, res) => {
   try {
     const { descripcion, ubicacion } = req.body;
