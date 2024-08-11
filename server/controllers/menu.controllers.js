@@ -26,7 +26,7 @@ export const updateMenuRequest = async (req, res) => {
 
 export const crearMenu = async (req, res) => {
   
-  console.log(imagen);
+  
   try {
     const { titulo, descripcion, costo, imagen } = req.body;
     const [result] = await pool.query(
