@@ -8,6 +8,7 @@ import Menu from "./pages/Menu";
 import MenuForm from "./pages/MenuForm";
 import MesasManager from "./pages/MesasManager";
 import MesasForm from "./pages/MesasForm";
+import PedidosPage from "./pages/PedidosPage";
 
 function App() {
   return (
@@ -29,6 +30,9 @@ function App() {
               {/* Mesas */}
               <Route path="/mesasManager" element={<MesasManager />} />
               <Route path="/MesasForm" element={<MesasForm />} />
+
+              {/* Pedidos */}
+              <Route path="pedidosPage" element={<PedidosPage />} />
             </Routes>
           </div>
         </div>

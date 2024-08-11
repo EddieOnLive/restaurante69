@@ -8,6 +8,15 @@ function NavBar() {
         <h1>Restaurante 69</h1>
       </Link>
       <ul className="flex gap-x-1">
+      <li>
+          <Link
+            to="/pedidospage"
+            className="bg-indigo-500 hover:bg-indigo-700 text-white
+              px-2 py-1"
+          >
+            Pedidos
+          </Link>
+        </li>
         <li>
           <Link
             to="/mesasManager"
