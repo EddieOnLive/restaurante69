@@ -25,6 +25,37 @@ export const updateMesasRequest = async (req, res) => {
   }
 };
 
+export const crearMesas = async (req, res) => {
+  try {
+    const { sillas } = req.body;
+    let reservado = 0;
+    const [result] = await pool.query(
+      "INSERT INTO mesas (sillasMesas, reservadoMesas) VALUES (?, ?)",
+      [sillas, reservado]
+    );
+    res.json({ id: result.insertId, sillas, reservado });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const borrarMesa = async (req, res) => {
+  try {
+    const [result] = await pool.query("DELETE FROM mesas WHERE idMesa = ?", [
+      req.params.id,
+    ]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Mesa no Encontrada" });
+    }
+
+    return res.sendStatus(204);
+  } catch (error) {
+    /* return res.error(500).json({ message: error.message }); */
+    console.log(error);
+  }
+};
+
 /* 
 export const obtenerUnClub = async (req, res) => {
   try {
